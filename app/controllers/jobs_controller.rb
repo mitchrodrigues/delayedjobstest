@@ -11,18 +11,21 @@ class JobsController < ApplicationController
   end
 
   def reset
-    Delayed::Job.delete_all
-    return redirect_to action: :index
+    Delayed::Job.delete_all # Delete all jobs in the table.
+    redirect_to action: :index
   end
 
 
   def queue
     Delayed::Job.enqueue(
        payload_object: job_constant.new, 
-       queue: params[:queue],
-       priority: job_priority
+       queue: params[:queue], # So this is so we can support multiple Q's
+       priority: job_priority # This is the magic, since we have workers listening
+                              # to multiple Q's make them respect priority as well 0 
+                              # being the highest here
     )
-    return redirect_to action: :index
+
+    redirect_to action: :index
   end
 
 
@@ -32,6 +35,7 @@ class JobsController < ApplicationController
     "#{params[:job].camelize}Job".constantize # Gross
   end
 
+  # Easiest way to turn queue into priority for this purposes
   def job_priority
     case params[:queue]
       when 'high'
