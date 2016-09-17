@@ -28,6 +28,7 @@
       <table class='table table-striped'>
         <thead>
           <th>Priority</th>
+          <th>Handler</th>
           <th>Failed At</th>
           <th>Created At</th>
         </thead>
@@ -35,6 +36,7 @@
         <% jobs.each do |job| %>
           <tr>
             <td><%= job.priority %></td>
+            <td><%= job.handler %></td>
             <td><%= job.failed_at %></td>
             <td><%= job.created_at %></td>
           </tr>
