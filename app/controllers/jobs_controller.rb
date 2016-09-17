@@ -10,6 +10,12 @@ class JobsController < ApplicationController
     end
   end
 
+  def reset
+    Delayed::Job.delete_all
+    return redirect_to action: :index
+  end
+
+
   def queue
     Delayed::Job.enqueue(
        payload_object: job_constant.new, 
